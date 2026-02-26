@@ -40,7 +40,7 @@ export default function LoginModal({ onClose }: Props) {
           <div className="relative mb-6">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Enter Password"
+              placeholder="Enter Your Password"
               required
               className="w-full p-3 border rounded-lg pr-12"
             />
