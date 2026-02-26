@@ -1,31 +1,25 @@
 "use client";
-interface HeaderProps {
-  onLoginClick: () => void;
-}
-export default function Header({ onLoginClick }: HeaderProps) {
+import { useRouter } from "next/navigation";
+import { Squares2X2Icon, HeartIcon, ClockIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { CarIcon } from "lucide-react";
+
+export default function Header() {
+  const router = useRouter();
+
   return (
-    <header className="fixed top-0 left-60 w-full bg-black/70 backdrop-blur-md text-white px-8 py-4 flex justify-between items-center">
+    <header className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
       
-      {/* Left Side */}
-      <h1 className="text-2xl font-bold tracking-wide">
+      <h1 className="text-2xl font-bold text-blue-900">
         TechNet Automotive
       </h1>
-      {/* Right Side */}
-      <div className="space-x-6 flex items-center">
-        <button
-          onClick={onLoginClick}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 left-100 rounded-lg transition z-50"
-        >
-          Logout
-        </button>
-
-        <button className="hover:text-blue-400 transition">
-          Contact Us
-        </button>
-
-        <button className="hover:text-blue-400 transition">
-          Learn More
-        </button>
+      <div className="flex items-center gap-6 text-gray-600">
+        <Squares2X2Icon className="w-6 h-6 cursor-pointer hover:text-blue-600" />
+        <CarIcon className="w-6 h-6 cursor-pointer hover:text-blue-600" />
+        <HeartIcon 
+          className="w-6 h-6 cursor-pointer hover:text-red-500"
+          onClick={() => router.push("/favorites")}/>
+        <ClockIcon className="w-6 h-6 cursor-pointer hover:text-blue-600" />
+        <SparklesIcon className="w-6 h-6 cursor-pointer hover:text-yellow-500" />
       </div>
     </header>
   );
