@@ -77,12 +77,13 @@ const productData: any = {
   }
 };
 export default function Dashboard() {
-  const [mode, setmode]=useState<"Interactive"|"Narrated">("Interactive");
+  const [mode, setmode]=useState<"Interactive"|"Narrated">("Narrated");
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [userFavorites, setUserFavorites] = useState<any[]>([]);
   const router = useRouter();
   //const { favorites, addToFavorites, removeFromFavorites, addToHistory } = useAppContext();
   const [search, setSearch] =useState("")
+  //const [filteredServices, setFilteredServices] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null); 
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -133,9 +134,9 @@ const getChapters = () => {
   ];
   const subCategories: any = {
     "Brake System": [
-      { title: "Brake Pads", slug: "brake-pads" },
-      { title: "Vacuum Booster", slug: "vacuum-booster" },
-      { title: "Disc Brake", slug: "disc-brake" },
+      { title: "Brake Pads", slug: "brake-pads"},
+      { title: "Vacuum Booster", slug: "vacuum-booster"},
+      { title: "Disc Brake", slug: "disc-brake"},
     ],
     "Steering System": [
       { title: "Steering Gear", slug: "steering-gear" },
@@ -143,9 +144,9 @@ const getChapters = () => {
       { title: "Steering Rack", slug: "steering-rack" },
     ],
   };
-  const filteredServices = services.filter((service) =>
-    service.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredServices = services.filter((service) => {
+    return service.title.toLowerCase().includes(search.toLowerCase());
+  });
   const playChapter = (chapter: any) => {
   if (!videoRef.current) return;
   setActiveChapter(chapter);
@@ -161,7 +162,6 @@ const handleTimeUpdate = () => {
 };
 const resetVideo = () => {
   if (!videoRef.current) return;
-
   setActiveChapter(null);
   videoRef.current.currentTime = 0;
   videoRef.current.play();
@@ -237,8 +237,8 @@ const resetVideo = () => {
               alt="User"
               onClick={() => router.push("/profile")}
               className="w-8 h-8 rounded-full object-cover cursor-pointer border-2 border-indigo-500"/>
-          </div>
-                </div>
+              </div>
+              </div>
         </header>
         <main className="p-8 flex-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -319,32 +319,37 @@ const resetVideo = () => {
                 controls
                 onTimeUpdate={handleTimeUpdate}
                 className="w-full h-[400px] rounded-lg mb-4"/>
-                {getChapters().length > 0 && (
-                  <div className="mb-4">
-                    <div className="flex flex-row gap-9">
-                      {getChapters().map((chapter, index) => (
-                        <span
-                        key={index}
-                        onClick={() => playChapter(chapter)}
-                        className={`cursor-pointer underline ${
-                          activeChapter?.label === chapter.label
-                          ? "text-blue-800 font-semibold"
-                          : "text-blue-600"}`}>
-                            {chapter.label}
-                            </span>))}
-                            <span
-                            onClick={() => {
-                              if (!videoRef.current) return;
-                              setActiveChapter(null);
-                              videoRef.current.currentTime = 0;
-                              videoRef.current.play();
-                             }}
-                             className="cursor-pointer underline text-gray-900">Reset</span></div>
-                             </div>
+                {mode === "Interactive" && (
+                <div className="mb-4">
+                  {mode === "Interactive" && (<>
+    {getChapters().length > 0 && (
+      <div className="mb-4">
+        <div className="flex flex-row gap-9">
+          {getChapters().map((chapter, index) => (
+            <span
+              key={index}
+              onClick={() => playChapter(chapter)}
+              className="cursor-pointer underline text-blue-600"
+            >
+              {chapter.label}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <p className="text-gray-600">
+      {selectedProduct.description}
+    </p>
+  </>
+)}
+                           </div>
                             )}
-                <p className="text-gray-600">
-                  {selectedProduct.description}
-                </p>
+                            {mode === "Narrated" && (
+                              <p className="text-gray-600 mt-4">
+                              {selectedProduct.description}
+                              </p>
+                            )}
               </div>
             </div>
           )}
